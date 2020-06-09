@@ -13,7 +13,7 @@ const mutationsTypes = {
 
 export const state = () => ({
   cars: [],
-  heading: [],
+  headings: [],
   count: {},
 });
 
@@ -21,14 +21,20 @@ export const getters = {
   cars(state) {
     return state.cars;
   },
+  heading(state) {
+    return state.headings;
+  },
+  countable(state) {
+    return state.count;
+  },
 };
 
 export const mutations = {
   [mutationsTypes.SET_CARS](state, cars) {
     state.cars = cars;
   },
-  [mutationsTypes.SET_HEADER](state, header) {
-    state.header = header;
+  [mutationsTypes.SET_HEADER](state, headings) {
+    state.headings = headings;
   },
   [mutationsTypes.SET_COUNTABLE](state, count) {
     state.count = Object.assign(count, state.count)
