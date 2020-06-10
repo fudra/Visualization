@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import VCTable from "@/components/VCTable";
 
 export default {
@@ -13,19 +13,13 @@ export default {
   components: {
     VCTable
   },
-  methods: {
-    ...mapActions({
-      fetchCars: "cars/fetch"
-    })
-  },
+
   computed: {
     ...mapGetters({
       cars: "cars/cars",
       heading: "cars/heading"
     })
   },
-  mounted() {
-    this.fetchCars();
-  }
+
 };
 </script>

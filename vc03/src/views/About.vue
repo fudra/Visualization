@@ -1,5 +1,17 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+   <VCChart />
   </div>
 </template>
+
+<script>
+import VCChart from "@/components/VCChart" 
+
+export default {
+  name: "About",
+  components: {
+    VCChart
+  }
+
+}
+</script>

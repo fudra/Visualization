@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col">
-    <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
       <div
-        class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200"
+        class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg"
       >
         <table class="min-w-full">
           <thead>
@@ -10,17 +10,16 @@
               <th
                 v-for="(item, idx) in headings"
                 :key="idx"
-                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-              >
-              {{item}}</th>
-            </tr>
+                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+              >{{item}}</th>
+            </tr> 
           </thead>
           <tbody class="bg-white">
             <tr v-for="(item, idx) in cars" :key="idx">
               <td
                 v-for="(header, idx) in headings"
                 :key="idx"
-                class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-900"
+                class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap border-b border-gray-200"
               >{{ item[header] }}</td>
             </tr>
           </tbody>
