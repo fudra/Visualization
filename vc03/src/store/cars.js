@@ -6,15 +6,22 @@ export const namespaced = true;
 
 const mutationsTypes = {
   SET_CARS: "SET_CARS",
+  SET_CURRENT_SELECTED: "SET_CURRENT_SELECTED",
+  CLEAR_CURRENT_SELECTED: "CLEAR_CURRENT_SELECTED",
   SET_HEADER: "SET_HEADER",
+  SET_AXIS: "SET_AXIS",
   SET_COUNTABLE: "SET_COUNTABLE",
   REST_COUNTABLE: "REST_COUNTABLE",
+  SET_COUNTRY_DATA_SET: "SET_COUNTRY_DATA_SET",
 };
 
 export const state = () => ({
   cars: [],
   headings: [],
   count: {},
+  currentSelected: [],
+  axis: {},
+  countries: [],
 });
 
 export const getters = {
@@ -27,6 +34,15 @@ export const getters = {
   countable(state) {
     return state.count;
   },
+  selected(state) {
+    return state.currentSelected;
+  },
+  axis(state) {
+    return state.axis;
+  },
+  countries(state) {
+    return state.countries;
+  }
 };
 
 export const mutations = {
@@ -43,6 +59,22 @@ export const mutations = {
   [mutationsTypes.REST_COUNTABLE](state) {
     state.count = {};
   },
+
+  [mutationsTypes.SET_AXIS](state, axis) {
+    state.axis = axis;
+  },
+
+  [mutationsTypes.SET_CURRENT_SELECTED](state, car) {
+    state.currentSelected.push(car);
+  },
+
+  [mutationsTypes.CLEAR_CURRENT_SELECTED](state) {
+    state.currentSelected = [];
+  },
+
+  [mutationsTypes.SET_COUNTRY_DATA_SET](state, countries) {
+    state.countries =countries;
+  },
 };
 
 export const actions = {
@@ -51,6 +83,18 @@ export const actions = {
   },
   clearUnit({ commit }) {
     commit(mutationsTypes.CLEAR_UNIT);
+  },
+  clearCurrentSelected({commit}) {
+    commit(mutationsTypes.CLEAR_CURRENT_SELECTED);
+  },
+  setCurrentSelected({ commit }, car) {
+    commit(mutationsTypes.SET_CURRENT_SELECTED, car);
+  },
+  setAxis({ commit }, axis) {
+    commit(mutationsTypes.SET_AXIS, axis);
+  },
+  selectCountries({ commit }, countries) {
+    commit(mutationsTypes.SET_COUNTRY_DATA_SET, countries);
   },
   countUnits({ commit}, cars) {
     commit(mutationsTypes.REST_COUNTABLE)

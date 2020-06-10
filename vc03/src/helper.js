@@ -26,8 +26,8 @@ export const jsonfy = (cars) => {
   });
 
   return {
-      data: temp, 
-      header, 
+    data: temp,
+    header,
   };
 };
 
@@ -39,6 +39,16 @@ export const countableItems = [
   "Baujahr",
 ];
 
+export const selectableItems = [
+  "Zylinder",
+  "PS",
+  "Baujahr",
+  "Beschleunigung",
+  "Gewicht",
+  "Hubraum",
+  "Verbrauch",
+];
+
 export const countItems = (cars, by = "Herkunft") => {
   let items = [];
 
@@ -48,7 +58,5 @@ export const countItems = (cars, by = "Herkunft") => {
 
   let data = countBy(items);
 
-  return Object
-        .keys(data)
-        .map((i) => ({ item: i, count: data[i] }));
+  return Object.keys(data).map((i) => ({ item: i, count: data[i] }));
 };
