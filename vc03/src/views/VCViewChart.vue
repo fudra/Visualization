@@ -1,11 +1,17 @@
 <template>
-  <div class="about">
-    <div class="flex mb-5 space-x-4">
-      <VCChartFilter  class="w-7/12"/> 
-      <VCSelecedCar  class="w-5/12"/> 
-    </div>
+  <div class="chart">
+    <div class="flex space-x-4">
+      <div class="w-1/3">
+      <div class="h-56">
+        <VCSelecedCar />
+      </div>
+        <VCChartFilter  class="mt-5"/>
+      </div>
 
-    <VCChart />
+      <div class="w-2/3">
+        <VCChart />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -14,14 +20,12 @@ import VCChart from "@/components/VCChart";
 import VCChartFilter from "@/components/VCChartFilter";
 import VCSelecedCar from "@/components/VCSelectedCar";
 
-
 export default {
   name: "VCViewChart",
   components: {
     VCChart,
     VCChartFilter,
     VCSelecedCar
-  },
-
+  }
 };
 </script>
