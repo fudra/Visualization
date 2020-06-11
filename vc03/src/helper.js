@@ -60,3 +60,6 @@ export const countItems = (cars, by = "Herkunft") => {
 
   return Object.keys(data).map((i) => ({ item: i, count: data[i] }));
 };
+
+// https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
+export const round = (value) =>  Math.round((value + Number.EPSILON) * 100) / 100

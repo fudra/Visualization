@@ -66,6 +66,30 @@
           </label>
         </div>
       </div>
+
+        <div class="mt-4">
+        <span class="text-gray-700">Einheit</span>
+        <div class="flex space-x-4">
+          <label class="flex items-center">
+            <input
+              type="radio"
+              class="form-radio"
+              value="metric"
+              v-model="selectUnitConversion"
+            />
+            <span class="ml-2">Metrisch</span>
+          </label>
+          <label class="flex items-center">
+            <input
+              type="radio"
+              class="form-radio"
+              value="imperial"
+              v-model="selectUnitConversion"
+            />
+            <span class="ml-2">Imperial</span>
+          </label>
+        </div>
+      </div>
     </main>
   </div>
 </template>
@@ -83,13 +107,15 @@ export default {
         y: "Beschleunigung",
         x: "Hubraum"
       },
-      selectedCountryDataSet: ["Japanese", "European"]
+      selectedCountryDataSet: ["Japanese", "European"],
+      selectUnitConversion: "metric",
     };
   },
   methods: {
     ...mapActions({
       setAxis: "cars/setAxis",
-      selectCountries: "cars/selectCountries"
+      selectCountries: "cars/selectCountries",
+      setUnitConversion: "cars/setUnitConversion",
     }),
     isOnAxis(value, byAxis) {
       return value === this.axis[byAxis];
@@ -109,6 +135,12 @@ export default {
       },
       deep: true,
       immediate: true
+    },
+    selectUnitConversion: {
+        handler(unit) {
+            this.setUnitConversion(unit);
+        },
+        immediate: true,
     }
   }
 };

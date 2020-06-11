@@ -1,8 +1,8 @@
 <template>
   <div class="about">
     <div class="flex mb-5 space-x-4">
-      <VCChartFilter  class="w-4/6"/> 
-      <VCSelecedCar  class="w-2/6"/> 
+      <VCChartFilter  class="w-7/12"/> 
+      <VCSelecedCar  class="w-5/12"/> 
     </div>
 
     <VCChart />
