@@ -4,6 +4,16 @@
       <h2 class="text-lg font-semibold text-gray-800">Filter</h2>
     </header>
     <main class="px-4 py-3">
+      <div class>
+        <span class="text-gray-700">Hersteller</span>
+        <vue-tags-input
+          v-model="tag"
+          :tags="tags"
+          :autocomplete-items="filteredItems"
+          @tags-changed="newTags => tags = newTags"
+        />
+      </div>
+
       <div class="mt-4">
         <span class="text-gray-700">Achsenbeschreibung</span>
 
@@ -67,25 +77,15 @@
         </div>
       </div>
 
-        <div class="mt-4">
+      <div class="mt-4">
         <span class="text-gray-700">Einheit</span>
         <div class="flex space-x-4">
           <label class="flex items-center">
-            <input
-              type="radio"
-              class="form-radio"
-              value="metric"
-              v-model="selectUnitConversion"
-            />
+            <input type="radio" class="form-radio" value="metric" v-model="selectUnitConversion" />
             <span class="ml-2">Metrisch</span>
           </label>
           <label class="flex items-center">
-            <input
-              type="radio"
-              class="form-radio"
-              value="imperial"
-              v-model="selectUnitConversion"
-            />
+            <input type="radio" class="form-radio" value="imperial" v-model="selectUnitConversion" />
             <span class="ml-2">Imperial</span>
           </label>
         </div>
@@ -95,11 +95,15 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { selectableItems } from "../helper";
+import VueTagsInput from "@johmun/vue-tags-input";
 
 export default {
   name: "VCChartFilter",
+  components: {
+    VueTagsInput
+  },
   data() {
     return {
       filterbleItems: selectableItems,
@@ -109,13 +113,30 @@ export default {
       },
       selectedCountryDataSet: ["Japanese", "European"],
       selectUnitConversion: "metric",
+      tag: "",
+      tags: [],
+      autocompleteItems: []
     };
+  },
+  computed: {
+    ...mapGetters({
+      countable: "cars/countable"
+    }),
+    supplier() {
+      return this.countable.Hersteller;
+    },
+    filteredItems() {
+      return this.autocompleteItems.filter(i => {
+        return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
+      });
+    }
   },
   methods: {
     ...mapActions({
       setAxis: "cars/setAxis",
       selectCountries: "cars/selectCountries",
       setUnitConversion: "cars/setUnitConversion",
+      setSupplier: "cars/setSupplier"
     }),
     isOnAxis(value, byAxis) {
       return value === this.axis[byAxis];
@@ -137,11 +158,31 @@ export default {
       immediate: true
     },
     selectUnitConversion: {
-        handler(unit) {
-            this.setUnitConversion(unit);
+      handler(unit) {
+        this.setUnitConversion(unit);
+      },
+      immediate: true
+    },
+    // map for tags
+    countable: {
+      handler(value) {
+        this.autocompleteItems = value.Hersteller.map(item => ({
+          text: `${item.item} (${item.count})`
+        }));
+
+        this.tags = value.Hersteller.map(item => ({
+          text: `${item.item} (${item.count})`
+        }));
+      },
+      immediate: true
+    },
+    tags: {
+        handler(value) {
+            this.setSupplier(value)
         },
-        immediate: true,
+        immediate: true
     }
-  }
+  },
+
 };
 </script>

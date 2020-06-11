@@ -13,7 +13,8 @@ const mutationsTypes = {
   SET_COUNTABLE: "SET_COUNTABLE",
   REST_COUNTABLE: "REST_COUNTABLE",
   SET_COUNTRY_DATA_SET: "SET_COUNTRY_DATA_SET",
-  SET_UNIT_CONVERSION: "SET_UNIT_CONVERSION"
+  SET_UNIT_CONVERSION: "SET_UNIT_CONVERSION",
+  SET_SUPPLIER: "SET_SUPPLIER",
 };
 
 export const state = () => ({
@@ -24,6 +25,7 @@ export const state = () => ({
   axis: {},
   countries: [],
   unitConversion: '',
+  selectedSupplier: [],
 });
 
 export const getters = {
@@ -46,11 +48,17 @@ export const getters = {
     return state.countries;
   },
   unit(state) {
-    return state.unitConversion
+    return state.unitConversion;
+  },
+  selectedSupplier(state) {
+    return state.selectedSupplier;
   }
 };
 
 export const mutations = {
+  [mutationsTypes.SET_SUPPLIER](state, supplier) {
+    state.selectedSupplier = supplier;
+  },
   [mutationsTypes.SET_CARS](state, cars) {
     state.cars = cars;
   },
@@ -86,6 +94,10 @@ export const mutations = {
 };
 
 export const actions = {
+  setSupplier({commit}, supplier ) {
+    let tmp = supplier.map(i => i.text.split(" ")[0])
+    commit(mutationsTypes.SET_SUPPLIER, tmp)
+  },
   setUnitConversion({commit}, unit ) {
     commit(mutationsTypes.SET_UNIT_CONVERSION, unit)
   },

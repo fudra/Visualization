@@ -18,7 +18,8 @@ export default {
       cars: "cars/cars",
       heading: "cars/heading",
       axis: "cars/axis",
-      countries: "cars/countries"
+      countries: "cars/countries",
+      selectedSupplier: "cars/selectedSupplier",
     }),
     chartData() {
       let data = [
@@ -94,7 +95,10 @@ export default {
     trasformData(type) {
       let a = this.filerBy(this.cars, "Herkunft", type);
 
-      return a.map(item => ({
+      let f = a.filter(i => this.selectedSupplier.includes(i.Hersteller) )
+
+    //console.log(f);
+      return f.map(item => ({
         x: item[this.axis.x],
         y: item[this.axis.y],
         data: item

@@ -11,7 +11,7 @@
                     <font-awesome-icon icon="car" size="lg" />
                   </div>
                 </div>
-                <div class="hidden md:block">
+                <div class="block">
                   <div class="flex items-baseline ml-10 space-x-4">
                     <router-link
                       to="/"
