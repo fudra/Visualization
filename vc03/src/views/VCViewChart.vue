@@ -16,7 +16,7 @@ import VCSelecedCar from "@/components/VCSelectedCar";
 
 
 export default {
-  name: "About",
+  name: "VCViewChart",
   components: {
     VCChart,
     VCChartFilter,

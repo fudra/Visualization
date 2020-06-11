@@ -12,15 +12,19 @@
                   </div>
                 </div>
                 <div class="hidden md:block">
-                  <div class="flex items-baseline ml-10">
+                  <div class="flex items-baseline ml-10 space-x-4">
                     <router-link
                       to="/"
-                      class="px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-md focus:outline-none focus:text-white focus:bg-gray-700"
-                    >Home</router-link>
+                      exact
+                      active-class="text-white bg-gray-900 "
+                      class="px-3 py-2 text-sm font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
+                    >Table</router-link>
                     <router-link
-                      to="/about"
-                      class="px-3 py-2 ml-4 text-sm font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
-                    >About</router-link>
+                      to="/chart"
+                      exact
+                      active-class="text-white bg-gray-900 "
+                      class="px-3 py-2 text-sm font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
+                    >Chart</router-link>
                   </div>
                 </div>
               </div>
