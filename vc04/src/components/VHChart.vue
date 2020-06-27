@@ -36,22 +36,21 @@ export default {
   methods: {
     filterLabel(node) {
       if (!this.search.length) {
-        //return "#2C5282"; //  blue-
-        return "fill-current text-blue-800"
+        return "fill-current text-blue-800";
       }
 
       return node.name.toLowerCase().indexOf(this.search.toLowerCase()) >= 0
-        ? "fill-current text-green-800"//"#2C5282" // Green-800
-        : "fill-current text-gray-300" //"#E2E8F0"; // Gray-300
+        ? "fill-current text-green-800" 
+        : "fill-current text-gray-300";
     },
     filterNode(node) {
       if (!this.search.length) {
-        return "fill-current text-gray-500"; // gray-500
+        return "fill-current text-gray-500";
       }
 
       return node.name.toLowerCase().indexOf(this.search.toLowerCase()) >= 0
-        ? "fill-current text-green-200" // Green-200
-        : "fill-current text-gray-200"; // Gray-200
+        ? "fill-current text-green-200" 
+        : "fill-current text-gray-200";
     },
     initData(data) {
       this.graph.links = data.links.map(d => Object.create(d));
@@ -85,7 +84,7 @@ export default {
       );
     },
     forceSimulation() {
-      this.simulation = d3
+      this.graph.simulation = d3
         .forceSimulation(this.graph.nodes)
         .force(
           "link",
@@ -111,13 +110,22 @@ export default {
             .attr("class", d => this.filterLabel(d));
         });
     },
+    searchNode() {
+      d3.timer(() => {
+        this.graph.node
+          .attr("class", d => this.filterNode(d));
+
+        this.graph.labels
+          .attr("class", d => this.filterLabel(d));
+      });
+    },
     createGraph(data) {
       this.initSvg();
 
       // create links
       this.graph.link = this.g
         .append("g")
-        .attr('stroke', '#999')
+        .attr("stroke", "#999")
         .attr("stroke-opacity", 0.6)
         .selectAll("line")
         .data(this.graph.links)
@@ -132,8 +140,8 @@ export default {
         .selectAll("circle")
         .data(this.graph.nodes)
         .join("circle")
-        .attr("r", 10)
-        //.attr("fill", "#4299E1");
+        .attr("r", 10);
+      //.attr("fill", "#4299E1");
 
       // create text
       this.graph.labels = this.g
@@ -147,6 +155,8 @@ export default {
         .text(d => d.name);
 
       this.forceSimulation();
+
+      this.searchNode();
 
       this.zoomChart();
     }
