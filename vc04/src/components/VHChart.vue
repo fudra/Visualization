@@ -20,17 +20,43 @@ export default {
         links: [],
         simulation: {},
         node: {},
-        link: {}
+        link: {},
+        labels: {}
       }
     };
   },
   props: {
-    data: Object
+    data: Object,
+    search: {
+      type: String,
+      default: ""
+    }
   },
+  computed: {},
   methods: {
+    filterLabel(node) {
+      if (!this.search.length) {
+        //return "#2C5282"; //  blue-
+        return "fill-current text-blue-800"
+      }
+
+      return node.name.toLowerCase().indexOf(this.search.toLowerCase()) >= 0
+        ? "fill-current text-green-800"//"#2C5282" // Green-800
+        : "fill-current text-gray-300" //"#E2E8F0"; // Gray-300
+    },
+    filterNode(node) {
+      if (!this.search.length) {
+        return "fill-current text-gray-500"; // gray-500
+      }
+
+      return node.name.toLowerCase().indexOf(this.search.toLowerCase()) >= 0
+        ? "fill-current text-green-200" // Green-200
+        : "fill-current text-gray-200"; // Gray-200
+    },
     initData(data) {
       this.graph.links = data.links.map(d => Object.create(d));
       this.graph.nodes = data.nodes.map(d => Object.create(d));
+      this.graph.labels = data.nodes.map(d => Object.create(d));
     },
     initSvg() {
       this.svg = d3
@@ -43,6 +69,8 @@ export default {
       this.g = this.svg.append("g");
     },
     zoomChart() {
+      // https://observablehq.com/@d3/zoom
+
       this.svg.call(
         d3
           .zoom()
@@ -72,7 +100,15 @@ export default {
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
 
-          this.graph.node.attr("cx", d => d.x).attr("cy", d => d.y);
+          this.graph.node
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .attr("class", d => this.filterNode(d));
+
+          this.graph.labels
+            .attr("x", d => d.x)
+            .attr("y", d => d.y)
+            .attr("class", d => this.filterLabel(d));
         });
     },
     createGraph(data) {
@@ -81,7 +117,7 @@ export default {
       // create links
       this.graph.link = this.g
         .append("g")
-        .attr("stroke", "#999")
+        .attr('stroke', '#999')
         .attr("stroke-opacity", 0.6)
         .selectAll("line")
         .data(this.graph.links)
@@ -97,12 +133,23 @@ export default {
         .data(this.graph.nodes)
         .join("circle")
         .attr("r", 10)
-        .attr("fill", "#4299E1");
+        //.attr("fill", "#4299E1");
+
+      // create text
+      this.graph.labels = this.g
+        //.append("g")
+        .selectAll("text")
+        .data(this.graph.nodes)
+        .join("text")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "20px")
+        .attr("class", "fill-current")
+        .text(d => d.name);
 
       this.forceSimulation();
 
       this.zoomChart();
-    },
+    }
   },
   watch: {
     data: {

@@ -1,31 +1,53 @@
 <template>
   <div id="app">
-    <VHChart :data="chartData"/>
+    <div class="absolute top-0 left-0 p-5 bg-white shadow-md">
+      <label for="search" class="block text-sm font-medium leading-5 text-gray-700">
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 text-gray-600">
+              <path
+                fill-rule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <input
+            v-model="search"
+            id="search"
+            class="block w-full pl-10 pr-12 form-input sm:text-sm sm:leading-5"
+            placeholder="Search a name..."
+          />
+        </div>
+      </label>
+    </div>
+    <VHChart :data="chartData" :search="search" />
   </div>
 </template>
 
 <script>
-import VHChart from './components/VHChart.vue'
-import axios from 'axios'
+import VHChart from "./components/VHChart.vue";
+import axios from "axios";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     VHChart
   },
-  data () {
+  data() {
     return {
+      search: "",
       chartData: {}
-    }
+    };
   },
   methods: {
-    async loadData () {
-      const { data } = await axios.get('./data.json')
-      this.chartData = data
+    async loadData() {
+      const { data } = await axios.get("./data.json");
+      this.chartData = data;
     }
   },
-  mounted () {
-    this.loadData()
+  mounted() {
+    this.loadData();
   }
-}
+};
 </script>
