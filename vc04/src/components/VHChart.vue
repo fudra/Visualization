@@ -11,76 +11,129 @@ export default {
   data() {
     return {
       cwidth: 600,
-      cheight: 600
+      cheight: 600,
+      scale: [-10, 10],
+      svg: {},
+      g: {},
+      graph: {
+        nodes: [],
+        links: [],
+        simulation: {},
+        node: {},
+        link: {}
+      }
     };
   },
   props: {
     data: Object
   },
   methods: {
-    createGraph(data) {
-      // Big thanks to https://observablehq.com/@d3/force-directed-graph
-
-      const links = data.links.map(d => Object.create(d));
-      const nodes = data.nodes.map(d => Object.create(d));
-
-      const svg = d3
+    initData(data) {
+      this.graph.links = data.links.map(d => Object.create(d));
+      this.graph.nodes = data.nodes.map(d => Object.create(d));
+    },
+    initSvg() {
+      this.svg = d3
         .select("#chart")
         .append("svg")
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .classed("svg-content-responsive", true)
         .attr("viewBox", [0, 0, this.cwidth, this.cheight]);
 
-      const link = svg
+      this.g = this.svg.append("g");
+    },
+    zoomChart() {
+      this.svg.call(
+        d3
+          .zoom()
+          .extent([
+            [0, 0],
+            [this.cwidth, this.cheight]
+          ])
+          .scaleExtent(this.scale)
+          .on("zoom", () => {
+            this.g.attr("transform", d3.event.transform);
+          })
+      );
+    },
+    forceSimulation() {
+      this.simulation = d3
+        .forceSimulation(this.graph.nodes)
+        .force(
+          "link",
+          d3.forceLink(this.graph.links).id(d => d.id)
+        )
+        .force("charge", d3.forceManyBody())
+        .force("center", d3.forceCenter(this.cwidth / 2, this.cheight / 2))
+        .on("tick", () => {
+          this.graph.link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+
+          this.graph.node.attr("cx", d => d.x).attr("cy", d => d.y);
+        });
+    },
+    createGraph(data) {
+      this.initSvg();
+
+      // create links
+      this.graph.link = this.g
         .append("g")
         .attr("stroke", "#999")
         .attr("stroke-opacity", 0.6)
         .selectAll("line")
-        .data(links)
+        .data(this.graph.links)
         .join("line")
-        .attr("stroke-width", d => Math.sqrt(d.value));
+        .attr("stroke-width", d => d.weight);
 
-      const node = svg
+      // create nodes
+      this.graph.node = this.g
         .append("g")
         .attr("stroke", "#fff")
         .attr("stroke-width", 2)
         .selectAll("circle")
-        .data(nodes)
+        .data(this.graph.nodes)
         .join("circle")
         .attr("r", 10)
         .attr("fill", "#4299E1");
 
-      const simulation = d3
-        .forceSimulation(nodes)
-        .force(
-          "link",
-          d3.forceLink(links).id(d => d.id)
-        )
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(this.cwidth / 2, this.cheight / 2));
+      this.forceSimulation();
 
-      console.log("links", JSON.stringify(links[2]));
-      console.log("nodes", JSON.stringify(nodes[2]));
-
-      simulation.on("tick", () => {
-        link
-          .attr("x1", d => d.source.x || 0)
-          .attr("y1", d => d.source.y || 0)
-          .attr("x2", d => d.target.x || 0)
-          .attr("y2", d => d.target.y || 0);
-
-        node.attr("cx", d => d.x || 0).attr("cy", d => d.y || 0);
-      });
-
-      //invalidation.then(() => simulation.stop());
-    }
+      this.zoomChart();
+    },
   },
   watch: {
     data: {
-      handler(v) {
-        this.createGraph(v);
+      handler(value) {
+        this.initData(value);
+        this.createGraph(value);
       }
     }
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+
+svg .rect {
+  fill: gold;
+  stroke: steelblue;
+  stroke-width: 5px;
+}
+</style>
