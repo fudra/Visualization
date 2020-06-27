@@ -40,7 +40,7 @@ export default {
       }
 
       return node.name.toLowerCase().indexOf(this.search.toLowerCase()) >= 0
-        ? "fill-current text-green-800" 
+        ? "fill-current text-green-800"
         : "fill-current text-gray-300";
     },
     filterNode(node) {
@@ -49,7 +49,7 @@ export default {
       }
 
       return node.name.toLowerCase().indexOf(this.search.toLowerCase()) >= 0
-        ? "fill-current text-green-200" 
+        ? "fill-current text-green-200"
         : "fill-current text-gray-200";
     },
     initData(data) {
@@ -99,24 +99,16 @@ export default {
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
 
-          this.graph.node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y)
-            .attr("class", d => this.filterNode(d));
+          this.graph.node.attr("cx", d => d.x).attr("cy", d => d.y);
 
-          this.graph.labels
-            .attr("x", d => d.x)
-            .attr("y", d => d.y)
-            .attr("class", d => this.filterLabel(d));
+          this.graph.labels.attr("x", d => d.x).attr("y", d => d.y);
         });
     },
     searchNode() {
       d3.timer(() => {
-        this.graph.node
-          .attr("class", d => this.filterNode(d));
+        this.graph.node.attr("class", d => this.filterNode(d));
 
-        this.graph.labels
-          .attr("class", d => this.filterLabel(d));
+        this.graph.labels.attr("class", d => this.filterLabel(d));
       });
     },
     createGraph(data) {
@@ -140,12 +132,11 @@ export default {
         .selectAll("circle")
         .data(this.graph.nodes)
         .join("circle")
-        .attr("r", 10);
-      //.attr("fill", "#4299E1");
+        .attr("r", (d) => Math.sqrt(25 * d.score));
 
       // create text
       this.graph.labels = this.g
-        //.append("g")
+        .append("g")
         .selectAll("text")
         .data(this.graph.nodes)
         .join("text")

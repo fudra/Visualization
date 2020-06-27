@@ -43,7 +43,19 @@ export default {
   methods: {
     async loadData() {
       const { data } = await axios.get("./data.json");
-      this.chartData = data;
+      this.chartData = this.countWeightNodes(data);
+    },
+    countWeightNodes(graph) {
+      // https://stackoverflow.com/questions/30675428/summing-up-the-weight-of-all-edges-to-a-node-in-d3-js
+      graph.nodes = graph.nodes.map((node, index) => {
+        node.score = graph.links
+          .filter(d =>  +d.source === +index || +d.target === +index)
+          .length;
+          
+        return node;
+      });
+
+      return graph;
     }
   },
   mounted() {
