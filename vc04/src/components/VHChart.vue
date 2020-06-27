@@ -21,7 +21,8 @@ export default {
         simulation: {},
         node: {},
         link: {},
-        labels: {}
+        labels: {},
+        transform: {}
       }
     };
   },
@@ -66,6 +67,7 @@ export default {
         .attr("viewBox", [0, 0, this.cwidth, this.cheight]);
 
       this.g = this.svg.append("g");
+      this.graph.transform = d3.zoomIdentity;
     },
     zoomChart() {
       // https://observablehq.com/@d3/zoom
@@ -84,6 +86,8 @@ export default {
       );
     },
     forceSimulation() {
+      const _this = this;
+
       this.graph.simulation = d3
         .forceSimulation(this.graph.nodes)
         .force(
@@ -92,17 +96,41 @@ export default {
         )
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(this.cwidth / 2, this.cheight / 2))
-        .on("tick", () => {
-          this.graph.link
+        .on("tick", function() {
+          // remove decay
+          this.alphaDecay(0);
+
+          _this.graph.link
             .attr("x1", d => d.source.x)
             .attr("y1", d => d.source.y)
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
 
-          this.graph.node.attr("cx", d => d.x).attr("cy", d => d.y);
+          _this.graph.node.attr("cx", d => d.x).attr("cy", d => d.y);
 
-          this.graph.labels.attr("x", d => d.x).attr("y", d => d.y);
+          _this.graph.labels.attr("x", d => d.x).attr("y", d => d.y);
         });
+    },
+    dragGraph() {
+      const _this = this;
+
+      this.graph.node.call(
+        d3
+          .drag()
+          //.container(canvas)
+          .on("start", function() {
+            d3.select(this).raise();
+            _this.g.attr("cursor", "grabbing");
+          })
+          .on("drag", function(d) {
+            d3.select(this)
+              .attr("cx", (d.x = d3.event.x))
+              .attr("cy", (d.y = d3.event.y));
+          })
+          .on("end", () => {
+            _this.g.attr("cursor", "grab");
+          })
+      );
     },
     searchNode() {
       d3.timer(() => {
@@ -132,7 +160,7 @@ export default {
         .selectAll("circle")
         .data(this.graph.nodes)
         .join("circle")
-        .attr("r", (d) => Math.sqrt(25 * d.score));
+        .attr("r", d => Math.sqrt(25 * d.score));
 
       // create text
       this.graph.labels = this.g
@@ -146,6 +174,8 @@ export default {
         .text(d => d.name);
 
       this.forceSimulation();
+
+      this.dragGraph();
 
       this.searchNode();
 
