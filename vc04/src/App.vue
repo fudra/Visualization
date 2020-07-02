@@ -21,22 +21,26 @@
             />
           </div>
         </label>
+        <label class="inline-flex items-center mt-2">
+          <input type="checkbox" class="form-checkbox" v-model="showLables" />
+          <span class="ml-2">show lables</span>
+        </label>
       </div>
 
       <div class="px-5 py-2 bg-gray-200">
         <div class="text-gray-800">
-          <div class="flex justify-between ">
+          <div class="flex justify-between">
             <span class="font-semibold">Move</span>
             <span class="italic text-gray-600">mouse drag</span>
           </div>
-          <div class="flex justify-between ">
+          <div class="flex justify-between">
             <span class="font-semibold">Zoom</span>
             <span class="italic text-gray-600">scroll</span>
           </div>
         </div>
       </div>
     </div>
-    <VHChart :data="chartData" :search="search" />
+    <VHChart :data="chartData" :search="search" :show-lables="showLables" />
   </div>
 </template>
 
@@ -52,7 +56,8 @@ export default {
   data() {
     return {
       search: "",
-      chartData: {}
+      chartData: {},
+      showLables: true
     };
   },
   methods: {

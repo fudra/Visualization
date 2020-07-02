@@ -31,6 +31,10 @@ export default {
     search: {
       type: String,
       default: ""
+    },
+    showLables: {
+      type: Boolean,
+      default: true,
     }
   },
   computed: {},
@@ -109,6 +113,13 @@ export default {
           _this.graph.node.attr("cx", d => d.x).attr("cy", d => d.y);
 
           _this.graph.labels.attr("x", d => d.x).attr("y", d => d.y);
+
+          if(!_this.showLables) {
+            _this.graph.labels.attr("style", "opacity: 0;");
+          } else {
+             _this.graph.labels.attr("style", "opacity: 1;");
+          }
+
         });
     },
     dragGraph() {
@@ -169,7 +180,7 @@ export default {
         .data(this.graph.nodes)
         .join("text")
         .attr("font-family", "sans-serif")
-        .attr("font-size", "20px")
+        .attr("font-size", d => `${16 * d.weight}px`)
         .attr("class", "fill-current")
         .text(d => d.name);
 
