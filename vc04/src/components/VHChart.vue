@@ -161,7 +161,7 @@ export default {
         .selectAll("line")
         .data(this.graph.links)
         .join("line")
-        .attr("stroke-width", d => d.weight);
+        .attr("stroke-width", d => Math.sqrt(d.weight));
 
       // create nodes
       this.graph.node = this.g
